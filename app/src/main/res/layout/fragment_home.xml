@@ -142,12 +142,39 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
+        <!-- Loading spinner — shown while executor fetches venue data -->
+        <LinearLayout
+            android:id="@+id/llVenueLoading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/pbVenues"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:indeterminateTint="@color/primary_green"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Finding pet-friendly spots..."
+                android:textSize="12sp"
+                android:textColor="@color/text_muted"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvNearbyVenues"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:paddingHorizontal="16dp"/>
+            android:paddingHorizontal="16dp"
+            android:visibility="gone"/>
 
         <View android:layout_width="match_parent" android:layout_height="80dp"/>
     </LinearLayout>

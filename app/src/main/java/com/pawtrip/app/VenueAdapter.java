@@ -1,6 +1,8 @@
 package com.pawtrip.app;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.*;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -38,19 +40,28 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VH> {
         h.itemView.setOnClickListener(x -> {
             if (listener != null) listener.onClick(v);
         });
+        // Google search button — opens browser with venue name + city
+        h.tvGoogleSearch.setOnClickListener(x -> {
+            String query = v.name
+                + (v.city != null && !v.city.isEmpty() ? " " + v.city : "");
+            String url = "https://www.google.com/search?q="
+                + Uri.encode(query);
+            ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        });
     }
 
     @Override public int getItemCount() { return list.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvName, tvType, tvHours, tvScore, tvRules;
+        TextView tvName, tvType, tvHours, tvScore, tvRules, tvGoogleSearch;
         VH(View v) {
             super(v);
-            tvName  = v.findViewById(R.id.tvVenueName);
-            tvType  = v.findViewById(R.id.tvVenueType);
-            tvHours = v.findViewById(R.id.tvVenueHours);
-            tvScore = v.findViewById(R.id.tvPawScore);
-            tvRules = v.findViewById(R.id.tvPetRules);
+            tvName        = v.findViewById(R.id.tvVenueName);
+            tvType        = v.findViewById(R.id.tvVenueType);
+            tvHours       = v.findViewById(R.id.tvVenueHours);
+            tvScore       = v.findViewById(R.id.tvPawScore);
+            tvRules       = v.findViewById(R.id.tvPetRules);
+            tvGoogleSearch = v.findViewById(R.id.tvGoogleSearch);
         }
     }
 }

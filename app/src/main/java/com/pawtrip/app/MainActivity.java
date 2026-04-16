@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(f, title);
             return true;
         });
+
+        // Handle deep-link from notification (open_tab extra)
+        int openTab = getIntent().getIntExtra("open_tab", -1);
+        if (openTab != -1) {
+            bottomNav.setSelectedItemId(openTab);
+        }
     }
 
     public void loadFragment(Fragment f, String title) {

@@ -38,5 +38,17 @@
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:textSize="12sp" android:textColor="@color/text_muted"
             android:layout_marginTop="2dp"/>
+
+        <!-- Search on Google button -->
+        <TextView android:id="@+id/tvGoogleSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔍 Search on Google"
+            android:textSize="12sp"
+            android:textColor="@color/primary_green"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:paddingVertical="4dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
     FusedLocationProviderClient fusedClient;
     TextView tvGreeting, tvPetInfo, tvStats, tvLocationBadge;
     RecyclerView rvVenues;
+    android.widget.LinearLayout llVenueLoading;   // spinner container
     String detectedCity = "";
     List<Venue> currentVenues;
     ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -45,6 +46,7 @@ public class HomeFragment extends Fragment {
         tvStats        = v.findViewById(R.id.tvStats);
         tvLocationBadge = v.findViewById(R.id.tvLocationBadge);
         rvVenues       = v.findViewById(R.id.rvNearbyVenues);
+        llVenueLoading = v.findViewById(R.id.llVenueLoading);
         rvVenues.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         String ownerName = db.getSetting("owner_name", "Traveller");
@@ -90,6 +92,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void detectLocationAndLoad() {
+        // Show spinner — background work is about to start
+        if (llVenueLoading != null) llVenueLoading.setVisibility(View.VISIBLE);
+        if (rvVenues      != null) rvVenues.setVisibility(View.GONE);
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -152,6 +157,9 @@ public class HomeFragment extends Fragment {
                 currentVenues = venues;
                 tvStats.setText(venues.size() + " pet-friendly spots in "
                     + (city.isEmpty() ? "database" : city));
+                // Hide spinner, show list
+                if (llVenueLoading != null) llVenueLoading.setVisibility(View.GONE);
+                rvVenues.setVisibility(View.VISIBLE);
                 rvVenues.setAdapter(new VenueAdapter(
                     venues.subList(0, Math.min(5, venues.size())),
                     requireContext(), this::showVenueDetail));
@@ -164,6 +172,9 @@ public class HomeFragment extends Fragment {
         currentVenues = all;
         tvStats.setText(all.size() + " pet-friendly venues in database");
         if (tvLocationBadge != null) tvLocationBadge.setVisibility(View.GONE);
+        // Hide spinner, show list
+        if (llVenueLoading != null) llVenueLoading.setVisibility(View.GONE);
+        rvVenues.setVisibility(View.VISIBLE);
         rvVenues.setAdapter(new VenueAdapter(
             all.subList(0, Math.min(5, all.size())),
             requireContext(), this::showVenueDetail));
@@ -197,6 +208,16 @@ public class HomeFragment extends Fragment {
             .setTitle(venue.name)
             .setMessage(msg)
             .setPositiveButton("Got it", null)
+            .setNeutralButton("Search on Google 🔍", (d, w) -> {
+                String query = venue.name
+                    + (venue.city != null && !venue.city.isEmpty()
+                        ? " " + venue.city : "");
+                String url = "https://www.google.com/search?q="
+                    + android.net.Uri.encode(query);
+                startActivity(new android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(url)));
+            })
             .show();
     }
 }
