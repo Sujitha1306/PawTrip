@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PawTrip" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorPrimaryDark">@color/dark_green</item>
+        <item name="colorAccent">@color/accent_orange</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="Theme.PawTrip.Splash" parent="Theme.PawTrip">
+        <item name="android:windowBackground">@color/primary_green</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="PawCardStyle">
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/card_bg</item>
+    </style>
+</resources>

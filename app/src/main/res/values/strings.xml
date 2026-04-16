@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PawTrip</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_map">Map</string>
+    <string name="tab_trips">Trips</string>
+    <string name="tab_tips">Tips</string>
+    <string name="tab_sos">SOS</string>
+    <string name="paw_score">Paw Score</string>
+    <string name="add_pet">Add Pet</string>
+    <string name="save_trip">Save Trip</string>
+    <string name="send_itinerary">Send Itinerary</string>
+    <string name="emergency_vet">Emergency Vet Mode</string>
+    <string name="no_venues">No pet-friendly venues found nearby.</string>
+    <string name="rss_loading">Loading travel tips...</string>
+    <string name="email_sender">sujitha1366@gmail.com</string>
+    <string name="email_password">weifijpwisiwbspv</string>
+</resources>

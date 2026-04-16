@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- Filter chips row -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="@color/white">
+        <LinearLayout android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <Button android:id="@+id/btnAll"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content" android:layout_height="36dp"
+                android:text="All" android:textSize="12sp"
+                android:layout_marginEnd="6dp"/>
+            <Button android:id="@+id/btnParks"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content" android:layout_height="36dp"
+                android:text="🌳 Parks" android:textSize="12sp"
+                android:layout_marginEnd="6dp"/>
+            <Button android:id="@+id/btnCafes"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content" android:layout_height="36dp"
+                android:text="☕ Cafés" android:textSize="12sp"
+                android:layout_marginEnd="6dp"/>
+            <Button android:id="@+id/btnVets"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content" android:layout_height="36dp"
+                android:text="🏥 Vets" android:textSize="12sp"
+                android:layout_marginEnd="6dp"/>
+            <Button android:id="@+id/btnHotels"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content" android:layout_height="36dp"
+                android:text="🏨 Hotels" android:textSize="12sp"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- OSMDroid MapView replaces SupportMapFragment -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/osmMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>

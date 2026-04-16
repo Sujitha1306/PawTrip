@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    style="@style/PawCardStyle">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+
+        <TextView android:id="@+id/tvTripTitle"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="16sp" android:textStyle="bold" android:textColor="@color/dark_green"/>
+
+        <TextView android:id="@+id/tvTripRoute"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="13sp" android:textColor="@color/primary_green"
+            android:layout_marginTop="4dp"/>
+
+        <TextView android:id="@+id/tvTripDate"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="12sp" android:textColor="@color/text_muted"
+            android:layout_marginTop="4dp"/>
+
+        <Button android:id="@+id/btnEmailTrip"
+            android:layout_width="wrap_content" android:layout_height="36dp"
+            android:text="✉️ Email Itinerary"
+            android:textSize="12sp" android:textColor="@color/white"
+            android:backgroundTint="@color/primary_green"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

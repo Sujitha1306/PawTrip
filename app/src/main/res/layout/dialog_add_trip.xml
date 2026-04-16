@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText android:id="@+id/etTripTitle"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="Trip title (e.g. Chennai to Pondicherry)"
+        android:background="@drawable/input_bg" android:padding="14dp"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText android:id="@+id/etOrigin"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="From" android:background="@drawable/input_bg"
+        android:padding="14dp" android:layout_marginBottom="10dp"/>
+
+    <EditText android:id="@+id/etDestination"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="To" android:background="@drawable/input_bg"
+        android:padding="14dp" android:layout_marginBottom="10dp"/>
+
+    <EditText android:id="@+id/etDate"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="Date (e.g. 2025-05-10)"
+        android:background="@drawable/input_bg" android:padding="14dp"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText android:id="@+id/etTripNotes"
+        android:layout_width="match_parent" android:layout_height="80dp"
+        android:hint="Notes" android:background="@drawable/input_bg"
+        android:padding="14dp" android:gravity="top"/>
+</LinearLayout>

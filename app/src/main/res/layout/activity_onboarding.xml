@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🐾 Welcome to PawTrip!"
+            android:textSize="26sp"
+            android:textColor="@color/dark_green"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Let's set up your profile and your pet's details."
+            android:textSize="14sp"
+            android:textColor="@color/text_muted"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Your Name" android:textColor="@color/dark_green" android:textStyle="bold"
+            android:textSize="13sp" android:layout_marginBottom="6dp"/>
+        <EditText android:id="@+id/etOwnerName"
+            android:layout_width="match_parent" android:layout_height="56dp"
+            android:hint="e.g. Meera" android:background="@drawable/input_bg"
+            android:padding="14dp" android:layout_marginBottom="16dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Your Email (for SOS &amp; itineraries)" android:textColor="@color/dark_green"
+            android:textStyle="bold" android:textSize="13sp" android:layout_marginBottom="6dp"/>
+        <EditText android:id="@+id/etEmail"
+            android:layout_width="match_parent" android:layout_height="56dp"
+            android:hint="you@gmail.com" android:inputType="textEmailAddress"
+            android:background="@drawable/input_bg" android:padding="14dp"
+            android:layout_marginBottom="24dp"/>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/light_green" android:layout_marginBottom="20dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="🐶  Pet Details" android:textSize="18sp"
+            android:textColor="@color/dark_green" android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Pet Name" android:textColor="@color/dark_green"
+            android:textStyle="bold" android:textSize="13sp" android:layout_marginBottom="6dp"/>
+        <EditText android:id="@+id/etPetName"
+            android:layout_width="match_parent" android:layout_height="56dp"
+            android:hint="e.g. Bruno" android:background="@drawable/input_bg"
+            android:padding="14dp" android:layout_marginBottom="16dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Breed" android:textColor="@color/dark_green"
+            android:textStyle="bold" android:textSize="13sp" android:layout_marginBottom="6dp"/>
+        <EditText android:id="@+id/etBreed"
+            android:layout_width="match_parent" android:layout_height="56dp"
+            android:hint="e.g. Golden Retriever" android:background="@drawable/input_bg"
+            android:padding="14dp" android:layout_marginBottom="16dp"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="16dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Age (years)" android:textColor="@color/dark_green"
+                    android:textStyle="bold" android:textSize="13sp" android:layout_marginBottom="6dp"/>
+                <EditText android:id="@+id/etAge"
+                    android:layout_width="match_parent" android:layout_height="56dp"
+                    android:hint="e.g. 3" android:inputType="number"
+                    android:background="@drawable/input_bg" android:padding="14dp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="8dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Weight (kg)" android:textColor="@color/dark_green"
+                    android:textStyle="bold" android:textSize="13sp" android:layout_marginBottom="6dp"/>
+                <EditText android:id="@+id/etWeight"
+                    android:layout_width="match_parent" android:layout_height="56dp"
+                    android:hint="e.g. 12.5" android:inputType="numberDecimal"
+                    android:background="@drawable/input_bg" android:padding="14dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Health Notes" android:textColor="@color/dark_green"
+            android:textStyle="bold" android:textSize="13sp" android:layout_marginBottom="6dp"/>
+        <EditText android:id="@+id/etHealthNotes"
+            android:layout_width="match_parent" android:layout_height="100dp"
+            android:hint="Any allergies, conditions, medications..."
+            android:background="@drawable/input_bg" android:padding="14dp"
+            android:gravity="top" android:layout_marginBottom="28dp"/>
+
+        <Button android:id="@+id/btnSave"
+            android:layout_width="match_parent" android:layout_height="56dp"
+            android:text="Let's Go! 🐾"
+            android:textSize="16sp" android:textStyle="bold"
+            android:background="@drawable/btn_primary"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+</ScrollView>
