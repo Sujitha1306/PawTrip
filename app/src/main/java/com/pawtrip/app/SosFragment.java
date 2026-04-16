@@ -1,5 +1,9 @@
 package com.pawtrip.app;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -166,26 +170,31 @@ public class SosFragment extends Fragment {
         tvNearestVet.setText("🔍 Finding nearest vet...");
         executor.execute(() -> {
             List<Venue> vets = db.getVenuesByType("vet");
+            // Remove duplicates by name
+            Map<String, Venue> unique = new LinkedHashMap<>();
+            for (Venue v : vets) unique.put(v.name, v);
+            List<Venue> uniqueVets = new ArrayList<>(unique.values());
+
             double minDist = Double.MAX_VALUE;
             Venue closest = null;
-            for (Venue vet : vets) {
-                double dist = haversine(currentLat, currentLng, vet.latitude, vet.longitude);
+            for (Venue vet : uniqueVets) {
+                double dist = haversine(currentLat, currentLng,
+                    vet.latitude, vet.longitude);
                 if (dist < minDist) { minDist = dist; closest = vet; }
             }
             final Venue found = closest;
-            final double dist = minDist;
+            final double dist  = minDist;
             mainHandler.post(() -> {
-                if (isAdded()) {
-                    nearestVet = found;
-                    if (found != null) {
-                        tvNearestVet.setText("🏥 " + found.name
-                            + "\n📏 " + String.format("%.1f", dist) + " km away");
-                        tvVetPhone.setText("📞 " + (found.phone.isEmpty()
-                            ? "No number saved" : found.phone));
-                        tvStatus.setText("🕐 Hours: " + found.openHours);
-                    } else {
-                        tvNearestVet.setText("No vet found in database");
-                    }
+                nearestVet = found;
+                if (found != null) {
+                    tvNearestVet.setText("🏥 " + found.name
+                        + "\n📍 " + (found.city != null ? found.city : "")
+                        + "\n📏 " + String.format("%.1f", dist) + " km from you");
+                    tvVetPhone.setText("📞 "
+                        + (found.phone.isEmpty() ? "No number saved" : found.phone));
+                    tvStatus.setText("🕐 " + found.openHours);
+                } else {
+                    tvNearestVet.setText("No vet found in database");
                 }
             });
         });
@@ -225,16 +234,37 @@ public class SosFragment extends Fragment {
     private void sendSosEmail() {
         String ownerEmail = db.getSetting("owner_email", "");
         if (ownerEmail.isEmpty()) {
-            Toast.makeText(requireContext(), "No email in profile", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(),
+                "No email in profile", Toast.LENGTH_SHORT).show();
             return;
         }
-        String vetInfo = nearestVet != null
-            ? nearestVet.name + " | " + nearestVet.phone : "Unknown";
-        String body = "PET EMERGENCY ALERT\n\n"
+        String vetName  = nearestVet != null ? nearestVet.name : "Unknown";
+        String vetPhone = nearestVet != null ? nearestVet.phone : "Unknown";
+        String vetCity  = nearestVet != null && nearestVet.city != null
+            ? nearestVet.city : "Unknown";
+        String vetLat   = nearestVet != null
+            ? String.valueOf(nearestVet.latitude) : "N/A";
+        String vetLng   = nearestVet != null
+            ? String.valueOf(nearestVet.longitude) : "N/A";
+
+        String body = "🚨 PET EMERGENCY ALERT\n"
+            + "Sent from PawTrip App\n"
+            + "═══════════════════════\n\n"
+            + "👤 OWNER / PET LOCATION (where I am now):\n"
             + "GPS: " + currentLat + ", " + currentLng + "\n"
-            + "Map: https://maps.google.com/?q=" + currentLat + "," + currentLng + "\n\n"
-            + "Nearest Vet: " + vetInfo + "\n\n"
+            + "Open on Maps: https://maps.google.com/?q="
+                + currentLat + "," + currentLng + "\n\n"
+            + "🏥 NEAREST VET CLINIC:\n"
+            + "Name: " + vetName + "\n"
+            + "City: " + vetCity + "\n"
+            + "Phone: " + vetPhone + "\n"
+            + "Vet on Maps: https://maps.google.com/?q="
+                + vetLat + "," + vetLng + "\n\n"
+            + "Please come to my location or call the vet immediately.\n"
+            + "═══════════════════════\n"
             + "Sent from PawTrip Emergency Mode";
-        EmailSender.sendEmail(ownerEmail, "🚨 PET EMERGENCY", body, requireContext());
+
+        EmailSender.sendEmail(ownerEmail,
+            "🚨 PET EMERGENCY - PawTrip SOS", body, requireContext());
     }
 }

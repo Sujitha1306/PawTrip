@@ -170,22 +170,17 @@ public class HomeFragment extends Fragment {
     }
 
     private void showAllVenuesDialog(List<Venue> venues) {
-        // Group by city
-        StringBuilder sb = new StringBuilder();
-        String lastCity = "";
-        for (Venue venue : venues) {
-            String city = venue.city != null ? venue.city : "Other";
-            if (!city.equals(lastCity)) {
-                sb.append("\n── ").append(city).append(" ──\n");
-                lastCity = city;
-            }
-            sb.append(venue.getTypeEmoji()).append(" ").append(venue.name).append("\n");
-            sb.append("   🐾 ").append(venue.pawScore)
-              .append("  |  🕐 ").append(venue.openHours).append("\n");
-        }
-        new AlertDialog.Builder(requireContext())
+        View dialogView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.dialog_all_venues, null);
+        androidx.recyclerview.widget.RecyclerView rv =
+            dialogView.findViewById(R.id.rvCityGroups);
+        rv.setLayoutManager(
+            new androidx.recyclerview.widget.LinearLayoutManager(requireContext()));
+        rv.setAdapter(new VenueCityAdapter(venues, requireContext(),
+            this::showVenueDetail));
+        new android.app.AlertDialog.Builder(requireContext())
             .setTitle("🐾 All Pet-Friendly Venues")
-            .setMessage(sb.toString())
+            .setView(dialogView)
             .setPositiveButton("Close", null)
             .show();
     }

@@ -20,15 +20,28 @@ public class UserSession {
             .apply();
     }
 
-    public boolean isLoggedIn() { return prefs.getBoolean("logged_in", false); }
-    public boolean hasAccount() { return !prefs.getString("email", "").isEmpty(); }
-    public String getName()     { return prefs.getString("name", ""); }
-    public String getEmail()    { return prefs.getString("email", ""); }
+    public void setLoggedIn(boolean val) {
+        prefs.edit().putBoolean("logged_in", val).apply();
+    }
+
+    public boolean isLoggedIn() {
+        return prefs.getBoolean("logged_in", false);
+    }
+
+    public boolean hasAccount() {
+        return !prefs.getString("email", "").isEmpty();
+    }
+
+    public String getName()  { return prefs.getString("name", ""); }
+    public String getEmail() { return prefs.getString("email", ""); }
 
     public boolean checkPassword(String input) {
         return prefs.getString("password", "").equals(input);
     }
 
-    public void logout() { prefs.edit().putBoolean("logged_in", false).apply(); }
-    public void clear()  { prefs.edit().clear().apply(); }
+    public void logout() {
+        prefs.edit().putBoolean("logged_in", false).apply();
+    }
+
+    public void clear() { prefs.edit().clear().apply(); }
 }

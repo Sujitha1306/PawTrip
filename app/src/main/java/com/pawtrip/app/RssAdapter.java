@@ -36,15 +36,22 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.VH> {
                 : ""));
         String desc = item.description != null
             ? item.description.replaceAll("<[^>]*>", "").trim() : "";
-        h.tvDesc.setText(desc);
+        // Show only first 120 chars as preview
+        h.tvDesc.setText(desc.length() > 120
+            ? desc.substring(0, 120) + "..." : desc);
+
+        // "Read more" indicator
+        h.tvReadMore.setVisibility(View.VISIBLE);
 
         h.itemView.setOnClickListener(v -> {
-            // If it has a real URL, open it; else show full detail dialog
             if (item.link != null && !item.link.isEmpty()
                     && item.link.startsWith("http")) {
-                ctx.startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(item.link)));
+                // Open actual website
+                ctx.startActivity(new android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(item.link)));
             } else {
+                // Show offline full detail
                 showFullDetail(item);
             }
         });
@@ -161,12 +168,13 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.VH> {
     @Override public int getItemCount() { return list.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvSource, tvDesc;
+        TextView tvTitle, tvSource, tvDesc, tvReadMore;
         VH(View v) {
             super(v);
             tvTitle  = v.findViewById(R.id.tvRssTitle);
             tvSource = v.findViewById(R.id.tvRssSource);
             tvDesc   = v.findViewById(R.id.tvRssDesc);
+            tvReadMore = v.findViewById(R.id.tvReadMore);
         }
     }
 }

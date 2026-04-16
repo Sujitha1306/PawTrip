@@ -27,5 +27,14 @@
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:textSize="13sp" android:textColor="@color/text_dark"
             android:maxLines="3" android:ellipsize="end"/>
+
+        <TextView android:id="@+id/tvReadMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Read more →"
+            android:textSize="12sp"
+            android:textColor="@color/primary_green"
+            android:textStyle="bold"
+            android:layout_marginTop="6dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

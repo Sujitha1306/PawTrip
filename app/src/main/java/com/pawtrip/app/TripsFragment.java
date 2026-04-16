@@ -28,16 +28,30 @@ public class TripsFragment extends Fragment {
         rvTrips.setAdapter(adapter);
 
         // Swipe to delete
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override public boolean onMove(@NonNull RecyclerView r, @NonNull RecyclerView.ViewHolder v,
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView r,
+                    @NonNull RecyclerView.ViewHolder v,
                     @NonNull RecyclerView.ViewHolder t) { return false; }
-            @Override public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int dir) {
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int dir) {
                 int pos = viewHolder.getAdapterPosition();
-                Trip t = trips.get(pos);
-                db.deleteTrip(t.id);
-                trips.remove(pos);
-                adapter.notifyItemRemoved(pos);
-                Toast.makeText(requireContext(), "Trip deleted", Toast.LENGTH_SHORT).show();
+                Trip t  = trips.get(pos);
+                new android.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Trip?")
+                    .setMessage("Delete \"" + t.title + "\"?")
+                    .setPositiveButton("Delete", (d, w) -> {
+                        db.deleteTrip(t.id);
+                        trips.remove(pos);
+                        adapter.notifyItemRemoved(pos);
+                        Toast.makeText(requireContext(),
+                            "Trip deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", (d, w) ->
+                        adapter.notifyItemChanged(pos))
+                    .show();
             }
         }).attachToRecyclerView(rvTrips);
 

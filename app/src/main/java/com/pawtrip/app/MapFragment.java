@@ -109,35 +109,27 @@ public class MapFragment extends Fragment {
     }
 
     private void refreshMarkers() {
+        if (osmMap == null) return;
         executor.execute(() -> {
-            List<Venue> venuesList;
-            if (!detectedCity.isEmpty() && currentFilter.equals("all")) {
-                venuesList = db.getVenuesByCity(detectedCity);
-                if (venuesList.isEmpty()) {
-                    venuesList = db.getAllVenues();
-                }
-            } else if (currentFilter.equals("all")) {
-                venuesList = db.getAllVenues();
-            } else {
-                venuesList = db.getVenuesByType(currentFilter);
-            }
+            // Always load ALL venues regardless of filter
+            List<Venue> allVenues = currentFilter.equals("all")
+                ? db.getAllVenues()
+                : db.getVenuesByType(currentFilter);
 
-            final List<Venue> venues = venuesList;
             mainHandler.post(() -> {
-                if (!isAdded()) return;
                 osmMap.getOverlays().clear();
                 osmMap.getOverlays().add(locationOverlay);
 
-                for (Venue venue : venues) {
-                    final Venue finalVenue = venue;
-                    GeoPoint point = new GeoPoint(finalVenue.latitude, finalVenue.longitude);
+                for (Venue venue : allVenues) {
+                    GeoPoint point = new GeoPoint(venue.latitude, venue.longitude);
                     Marker marker = new Marker(osmMap) {
                         @Override
                         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
                             if (shadow) return;
-                            Point screenPoint = mapView.getProjection().toPixels(getPosition(), null);
+                            Point screenPoint = mapView.getProjection()
+                                .toPixels(getPosition(), null);
                             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                            switch (finalVenue.type) {
+                            switch (venue.type) {
                                 case "vet":   paint.setColor(Color.parseColor("#D85A30")); break;
                                 case "cafe":  paint.setColor(Color.parseColor("#EF9F27")); break;
                                 case "hotel": paint.setColor(Color.parseColor("#185FA5")); break;
@@ -145,16 +137,22 @@ public class MapFragment extends Fragment {
                             }
                             canvas.drawCircle(screenPoint.x, screenPoint.y, 28, paint);
                             paint.setColor(Color.WHITE);
-                            paint.setTextSize(28);
+                            paint.setTextSize(26);
                             paint.setTextAlign(Paint.Align.CENTER);
-                            canvas.drawText(finalVenue.getTypeEmoji(), screenPoint.x, screenPoint.y + 10, paint);
+                            canvas.drawText(venue.getTypeEmoji(),
+                                screenPoint.x, screenPoint.y + 9, paint);
                         }
                     };
                     marker.setPosition(point);
-                    marker.setTitle(finalVenue.name);
-                    marker.setSnippet("🐾 " + finalVenue.pawScore + " | " + finalVenue.openHours + "\n" + finalVenue.petRules);
+                    marker.setTitle(venue.name);
+                    marker.setSnippet("📍 " + (venue.city != null ? venue.city : "")
+                        + " | 🐾 " + venue.pawScore
+                        + "\n🕐 " + venue.openHours
+                        + "\n📋 " + venue.petRules);
                     marker.setOnMarkerClickListener((m, map) -> {
-                        Toast.makeText(requireContext(), m.getTitle() + "\n" + m.getSnippet(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(),
+                            m.getTitle() + "\n" + m.getSnippet(),
+                            Toast.LENGTH_LONG).show();
                         return true;
                     });
                     osmMap.getOverlays().add(marker);

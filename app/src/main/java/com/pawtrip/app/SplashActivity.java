@@ -12,16 +12,21 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         new Handler().postDelayed(() -> {
             UserSession session = new UserSession(this);
-            DatabaseHelper db   = new DatabaseHelper(this);
             Intent intent;
             if (!session.hasAccount()) {
+                // No account at all - go to Register
                 intent = new Intent(this, RegisterActivity.class);
             } else if (!session.isLoggedIn()) {
+                // Has account but not logged in - go to Login
                 intent = new Intent(this, LoginActivity.class);
-            } else if (db.getAllPets().isEmpty()) {
-                intent = new Intent(this, OnboardingActivity.class);
             } else {
-                intent = new Intent(this, MainActivity.class);
+                // Logged in - check if pet is set up
+                DatabaseHelper db = new DatabaseHelper(this);
+                if (db.getAllPets().isEmpty()) {
+                    intent = new Intent(this, OnboardingActivity.class);
+                } else {
+                    intent = new Intent(this, MainActivity.class);
+                }
             }
             startActivity(intent);
             finish();
