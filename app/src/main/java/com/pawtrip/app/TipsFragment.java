@@ -18,32 +18,34 @@ public class TipsFragment extends Fragment {
 
     RecyclerView rvRss;
     ProgressBar progressBar;
+    android.widget.LinearLayout llTipsLoading;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    // Pet-related RSS feeds (free, no auth needed)
+    // Reliable free RSS feeds (pet / dog news)
     private static final String[] RSS_URLS = {
-        "https://www.petmd.com/rss.xml",
-        "https://bringfido.com/blog/feed/"
+        "https://www.akc.org/rss/news/",
+        "https://feeds.feedburner.com/dogtime-dogs"
     };
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle s) {
         View v = inflater.inflate(R.layout.fragment_tips, container, false);
-        rvRss = v.findViewById(R.id.rvRss);
-        progressBar = v.findViewById(R.id.progressBar);
+        rvRss         = v.findViewById(R.id.rvRss);
+        progressBar   = v.findViewById(R.id.progressBar);
+        llTipsLoading = v.findViewById(R.id.llTipsLoading);
         rvRss.setLayoutManager(new LinearLayoutManager(requireContext()));
         fetchRss();
         return v;
     }
 
     private void fetchRss() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (llTipsLoading != null) llTipsLoading.setVisibility(View.VISIBLE);
         executor.execute(() -> {
             List<RssItem> items = new ArrayList<>();
             for (String url : RSS_URLS) {
                 try {
-                    InputStream is = new URL(url).openStream();
+                    java.io.InputStream is = new URL(url).openStream();
                     XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                     XmlPullParser parser = factory.newPullParser();
                     parser.setInput(is, "UTF-8");
@@ -54,56 +56,65 @@ public class TipsFragment extends Fragment {
                         if (event == XmlPullParser.START_TAG) {
                             if ("item".equals(tag)) current = new RssItem();
                             else if (current != null) {
-                                if ("title".equals(tag)) current.title = parser.nextText();
-                                else if ("link".equals(tag)) current.link = parser.nextText();
+                                if ("title".equals(tag))       current.title       = parser.nextText();
+                                else if ("link".equals(tag))  current.link        = parser.nextText();
                                 else if ("description".equals(tag)) current.description = parser.nextText();
-                                else if ("pubDate".equals(tag)) current.pubDate = parser.nextText();
+                                else if ("pubDate".equals(tag)) current.pubDate   = parser.nextText();
                             }
                         } else if (event == XmlPullParser.END_TAG && "item".equals(tag) && current != null) {
-                            current.source = url.contains("petmd") ? "PetMD" : "BringFido";
+                            current.source = url.contains("akc") ? "AKC.org" : "DogTime.com";
                             items.add(current);
                             current = null;
                         }
                         event = parser.next();
                     }
                 } catch (Exception e) {
-                    // Feed unavailable, continue
+                    // Feed unavailable, continue to next or fallback
                 }
             }
-            // Add offline fallback items if empty
+
+            // Offline fallback — curated tips with real website links
             if (items.isEmpty()) {
-                String[][] tips = {
-                    {"Top 10 Pet-Friendly Beaches in India",
+                Object[][] tips = {
+                    {"Top Pet-Friendly Beaches in India 🏖️",
                      "Goa, Pondicherry, Kovalam — beaches where your dog can run free on the sand.",
-                     "PawTrip Tips", "2025-01-01"},
-                    {"Vet checklist before a road trip",
+                     "CarryMyPet.com", "2025-01-01",
+                     "https://www.carrymypet.com/pet-friendly-beaches-in-india-best-beaches-to-visit-with-your-dog"},
+                    {"Vet Checklist Before a Road Trip 🚗",
                      "Vaccinations, tick treatment, travel anxiety meds — what to confirm before leaving.",
-                     "PawTrip Tips", "2025-01-05"},
-                    {"Pet-friendly trains in India — full guide",
+                     "TurnerVet.com", "2025-01-05",
+                     "https://turnervet.com/blog?article_id=road-trip-ready-how-to-travel-safely-with-your-pet-this-summer"},
+                    {"Travelling with Your Dog via Indian Railways 🚆",
                      "IR allows dogs in AC First Class with a valid ticket. Here's how to book.",
-                     "PawTrip Tips", "2025-01-10"},
-                    {"Best pet-friendly hotels in Chennai",
-                     "These Chennai hotels have dedicated pet policies, bowls, and walking areas.",
-                     "PawTrip Tips", "2025-01-15"},
-                    {"How to calm an anxious dog during travel",
+                     "HeadsUpForTails.com", "2025-01-10",
+                     "https://headsupfortails.com/blogs/dogs/travelling-with-your-dog-via-indian-railways"},
+                    {"Best Pet-Friendly Hotels in Chennai 🏨",
+                     "Hotels in Chennai with dedicated pet policies, bowls, and walking areas.",
+                     "Booking.com", "2025-01-15",
+                     "https://www.booking.com/pets/city/in/chennai.en-gb.html"},
+                    {"Say Goodbye to Pet Anxiety During Travel 🙏",
                      "Thundershirts, familiar toys, and short practice drives all help reduce stress.",
-                     "PawTrip Tips", "2025-01-20"},
-                    {"What to pack in your pet's travel bag",
+                     "AMTM India", "2025-01-20",
+                     "https://amtmindia.org/say-goodbye-to-pet-anxiety-tips-for-soothing-separation-stress/"},
+                    {"Ultimate Dog Packing List 🎒",
                      "Food, water bowl, leash, poop bags, first aid kit, vaccination records.",
-                     "PawTrip Tips", "2025-01-25"}
+                     "EagleCreek.com", "2025-01-25",
+                     "https://eaglecreek.com/blogs/articles/ultimate-dog-packing-list-what-to-pack-for-your-pet"}
                 };
-                for (String[] tip : tips) {
+                for (Object[] tip : tips) {
                     RssItem item = new RssItem();
-                    item.title = tip[0];
-                    item.description = tip[1];
-                    item.source = tip[2];
-                    item.pubDate = tip[3];
+                    item.title       = (String) tip[0];
+                    item.description = (String) tip[1];
+                    item.source      = (String) tip[2];
+                    item.pubDate     = (String) tip[3];
+                    item.link        = (String) tip[4];   // real URL — opens in browser
                     items.add(item);
                 }
             }
+
             mainHandler.post(() -> {
                 if (isAdded()) {
-                    progressBar.setVisibility(View.GONE);
+                    if (llTipsLoading != null) llTipsLoading.setVisibility(View.GONE);
                     rvRss.setAdapter(new RssAdapter(items, requireContext()));
                 }
             });
