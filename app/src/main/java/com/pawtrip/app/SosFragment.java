@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.location.*;
+import com.bumptech.glide.Glide;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.*;
@@ -51,11 +52,21 @@ public class SosFragment extends Fragment {
         btnCallVet        = v.findViewById(R.id.btnCallVet);
         btnSendEmail      = v.findViewById(R.id.btnSendEmail);
         btnChangeLocation = v.findViewById(R.id.btnChangeLocation);
+        ImageView ivHeaderPhoto = v.findViewById(R.id.ivHeaderPetPhoto);
 
         btnSOS.setOnClickListener(x -> triggerFullSOS());
         btnCallVet.setOnClickListener(x -> callVet());
         btnSendEmail.setOnClickListener(x -> sendSosEmail());
         btnChangeLocation.setOnClickListener(x -> showEnterAddressDialog());
+
+        List<Pet> pets = db.getAllPets();
+        if (!pets.isEmpty()) {
+            Pet p = pets.get(0);
+            if (ivHeaderPhoto != null && p.photoUri != null && !p.photoUri.isEmpty()) {
+                ivHeaderPhoto.setVisibility(View.VISIBLE);
+                Glide.with(this).load(android.net.Uri.parse(p.photoUri)).circleCrop().into(ivHeaderPhoto);
+            }
+        }
 
         requestLocationOrAsk();
         return v;

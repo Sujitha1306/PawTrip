@@ -81,7 +81,85 @@
             android:layout_width="match_parent" android:layout_height="100dp"
             android:hint="Any allergies, medications, conditions..."
             android:background="@drawable/input_bg" android:padding="14dp"
-            android:gravity="top" android:layout_marginBottom="28dp"/>
+            android:gravity="top" android:layout_marginBottom="24dp"/>
+
+        <!-- Pet Photo Upload -->
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet Photo 📷" android:textColor="@color/dark_green"
+            android:textStyle="bold" android:textSize="13sp"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <ImageView android:id="@+id/ivPetPhoto"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/input_bg"
+                android:src="@android:drawable/ic_menu_camera"
+                android:padding="16dp"
+                android:layout_marginEnd="12dp"/>
+
+            <LinearLayout android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Button android:id="@+id/btnUploadPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Choose from Gallery"
+                    android:textSize="13sp"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/primary_green"/>
+
+                <TextView android:id="@+id/tvPhotoStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No photo selected"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_muted"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Vaccination / Ownership Proof -->
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vaccination &amp; Ownership Proof 📄"
+            android:textColor="@color/dark_green"
+            android:textStyle="bold" android:textSize="13sp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload vaccination certificate or registration document (PDF or image)"
+            android:textSize="11sp"
+            android:textColor="@color/text_muted"
+            android:layout_marginBottom="8dp"/>
+
+        <Button android:id="@+id/btnUploadProof"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="📎  Upload Document"
+            android:textSize="13sp"
+            android:textColor="@color/dark_green"
+            android:backgroundTint="@color/light_green"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView android:id="@+id/tvProofStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No document selected"
+            android:textSize="11sp"
+            android:textColor="@color/text_muted"
+            android:layout_marginBottom="28dp"/>
 
         <Button android:id="@+id/btnSave"
             android:layout_width="match_parent" android:layout_height="56dp"

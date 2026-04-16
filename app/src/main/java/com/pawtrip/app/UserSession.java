@@ -43,5 +43,15 @@ public class UserSession {
         prefs.edit().putBoolean("logged_in", false).apply();
     }
 
+    /** Saves an arbitrary extra string (e.g. URI path for photo or proof doc). */
+    public void saveExtra(String key, String value) {
+        prefs.edit().putString(key, value).apply();
+    }
+
+    /** Retrieves an arbitrary extra string saved via saveExtra(). */
+    public String getExtra(String key) {
+        return prefs.getString(key, "");
+    }
+
     public void clear() { prefs.edit().clear().apply(); }
 }

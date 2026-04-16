@@ -11,7 +11,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pawtrip.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;  // bumped: added pet photo_uri, proof_uri
 
     // Table names
     public static final String TABLE_VENUES = "venues";
@@ -49,7 +49,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "weight REAL,"
                 + "health_notes TEXT,"
                 + "is_senior INTEGER DEFAULT 0,"
-                + "owner_email TEXT)");
+                + "owner_email TEXT,"
+                + "photo_uri TEXT DEFAULT '',"
+                + "proof_uri TEXT DEFAULT '')");
 
         db.execSQL("CREATE TABLE " + TABLE_TRIPS + " ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -152,13 +154,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VENUES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PETS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIPS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIP_STOPS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HEALTH);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
-        onCreate(db);
+        if (oldVersion < 3) {
+            // Add pet photo/proof URI columns safely (won't crash if they already exist)
+            try { db.execSQL("ALTER TABLE " + TABLE_PETS + " ADD COLUMN photo_uri TEXT DEFAULT ''"); } catch (Exception ignored) {}
+            try { db.execSQL("ALTER TABLE " + TABLE_PETS + " ADD COLUMN proof_uri TEXT DEFAULT ''"); } catch (Exception ignored) {}
+        }
     }
 
     // ── VENUE METHODS ──
@@ -257,6 +257,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("health_notes", p.healthNotes);
         cv.put("is_senior", p.age > 7 ? 1 : 0);
         cv.put("owner_email", p.ownerEmail);
+        cv.put("photo_uri", p.photoUri != null ? p.photoUri : "");
+        cv.put("proof_uri", p.proofUri != null ? p.proofUri : "");
         return db.insert(TABLE_PETS, null, cv);
     }
 
@@ -273,6 +275,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             p.weight = c.getDouble(c.getColumnIndexOrThrow("weight"));
             p.healthNotes = c.getString(c.getColumnIndexOrThrow("health_notes"));
             p.ownerEmail = c.getString(c.getColumnIndexOrThrow("owner_email"));
+            // Read new URI columns safely (default to empty if column missing)
+            int photoCol = c.getColumnIndex("photo_uri");
+            int proofCol = c.getColumnIndex("proof_uri");
+            p.photoUri = photoCol >= 0 ? c.getString(photoCol) : "";
+            p.proofUri = proofCol >= 0 ? c.getString(proofCol) : "";
             list.add(p);
         }
         c.close();

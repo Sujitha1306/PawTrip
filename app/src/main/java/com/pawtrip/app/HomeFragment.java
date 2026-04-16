@@ -14,6 +14,7 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import com.bumptech.glide.Glide;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.location.*;
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
         tvLocationBadge = v.findViewById(R.id.tvLocationBadge);
         rvVenues       = v.findViewById(R.id.rvNearbyVenues);
         llVenueLoading = v.findViewById(R.id.llVenueLoading);
+        ImageView ivHeaderPhoto = v.findViewById(R.id.ivHeaderPetPhoto);
         rvVenues.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         String ownerName = db.getSetting("owner_name", "Traveller");
@@ -57,6 +59,11 @@ public class HomeFragment extends Fragment {
             Pet p = pets.get(0);
             tvPetInfo.setText("🐾 Travelling with " + p.name + " · " + p.breed);
             if (p.isSenior()) tvPetInfo.append("\n⚠️ Senior pet — shorter routes");
+            
+            if (ivHeaderPhoto != null && p.photoUri != null && !p.photoUri.isEmpty()) {
+                ivHeaderPhoto.setVisibility(View.VISIBLE);
+                Glide.with(this).load(android.net.Uri.parse(p.photoUri)).circleCrop().into(ivHeaderPhoto);
+            }
         }
 
         // Stats card — tap to see all venues
